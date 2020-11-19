@@ -13,7 +13,6 @@ const upload = Multer({
       cb(null, Path.resolve(__dirname, '../upload'))
     },
     filename(req, file, cb) {
-      console.log(file)
       cb(null, file.originalname)
     }
   }),
