@@ -1,0 +1,45 @@
+<style>
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+<body>
+  <form action="/api/upload" method="post" enctype="multipart/form-data">
+    <input type="file" name="avatar" />
+    <button type="submit">upload</button>
+  </form>
+  <div>
+    <textarea name="" id="shell" cols="30" rows="10"></textarea>
+    <button id="btn">shell</button>
+    <textarea name="" id="result" cols="30" rows="10"></textarea>
+  </div>
+</body>
+<script>
+  shell.onkeydown = function (e) {
+    const isEnter = e.keyCode == 13
+    const value = e.target.value
+    if (isEnter && value) {
+      e.target.value = value.trim()
+      e.preventDefault()
+      btn.onclick()
+    }
+  }
+  btn.onclick = function () {
+    const {value} = shell
+    if (!value) {
+      return
+    }
+    fetch('/api/shell', {
+      method: 'post',
+      body: JSON.stringify({shell: value}),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((res) => res.json())
+      .then(({data}) => (result.value = data))
+      .catch((e) => console.log(e))
+  }
+</script>
